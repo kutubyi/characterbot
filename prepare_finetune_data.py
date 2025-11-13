@@ -76,7 +76,26 @@ def convert_style_to_alpaca(entries: List[Dict[str, Any]]) -> List[Dict[str, Any
     return converted
 
 
-def merge_finetune_data(mcq_path: str, qa_path: str, style_path: str, output_path: str) -> bool:
+def split_train_test(data: List[Dict[str, Any]], train_ratio: float = 0.8) -> tuple:
+    labels_dict = {}
+    for item in data:
+        label = item.get("label", "unknown")
+        if label not in labels_dict:
+            labels_dict[label] = []
+        labels_dict[label].append(item)
+
+    train_data = []
+    test_data = []
+
+    for label, items in labels_dict.items():
+        split_idx = int(len(items) * train_ratio)
+        train_data.extend(items[:split_idx])
+        test_data.extend(items[split_idx:])
+
+    return train_data, test_data
+
+
+def merge_finetune_data(mcq_path: str, qa_path: str, style_path: str, output_dir: str) -> bool:
     mcq_data = load_json_file(mcq_path)
     print(f"Loaded {Path(mcq_path).name}: {len(mcq_data)} entries")
 
@@ -97,18 +116,28 @@ def merge_finetune_data(mcq_path: str, qa_path: str, style_path: str, output_pat
     merged_data = converted_mcq + converted_qa + converted_style
     print(f"Total merged: {len(merged_data)} entries")
 
-    # Save output
-    if output_path is None:
-        output_path = "fine_tune.json"
+    train_data, test_data = split_train_test(merged_data, train_ratio=0.8)
+    print(f"\nTrain/Test split (80% train / 20% test for each label):")
+    print(f"  Training data: {len(train_data)} entries")
+    print(f"  Test data: {len(test_data)} entries")
 
-    # Create output directory if it doesn't exist
-    output_dir = os.path.dirname(output_path)
-    if output_dir and not os.path.exists(output_dir):
+    if output_dir is None:
+        output_dir = "train_with_charlora"
+    if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(merged_data, f, ensure_ascii=False, indent=2)
-    print(f"\nSaved merged output to: {output_path}")
+    # Save training data
+    train_output_path = os.path.join(output_dir, "fine_tune.json")
+    with open(train_output_path, 'w', encoding='utf-8') as f:
+        json.dump(train_data, f, ensure_ascii=False, indent=2)
+    print(f"Saved training data to: {train_output_path}")
+
+    # Save test data
+    test_output_path = os.path.join(output_dir, "test.json")
+    with open(test_output_path, 'w', encoding='utf-8') as f:
+        json.dump(test_data, f, ensure_ascii=False, indent=2)
+    print(f"Saved test data to: {test_output_path}")
+
     return True
 
 
@@ -128,7 +157,7 @@ def main():
     )
     parser.add_argument(
         "--output",
-        default="train_with_charlora/fine_tune.json"
+        default="train_with_charlora",
     )
 
     args = parser.parse_args()
