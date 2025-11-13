@@ -12,9 +12,9 @@ The experimental dataset `luxun_essay.json` comprises 638 articles sourced from 
 
 To set up the environment and install necessary dependencies, follow the steps below:
 
-- `python3`
-- `conda create --name env `
-- `pip3 install -r requirements.txt`
+- `conda create -n characterbot python=3.11`
+- `conda activate characterbot`
+- `pip install -r requirements.txt`
 
 ## How to Use
 
