@@ -78,7 +78,7 @@ def main():
     )
     parser.add_argument(
         "--output",
-        default="pre_train.json"
+        default="train_with_charlora/pre_train.json"
     )
     parser.add_argument(
         "--author",
