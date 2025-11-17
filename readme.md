@@ -30,7 +30,9 @@ Replace `your_openai_api_key_here` with your actual OpenAI API key.
 
 ### Data Generation
 
-> **Note:** Before running the scripts below, update input/output file names in `authorial_perspective_reframing.py`, `multiple_choice_questions_data.py`, `generative_qa_data.py`, and `style_transfer_data.py` as needed.
+> **Note:** Before running the scripts below:
+> - Update input/output file names in `authorial_perspective_reframing.py`, `multiple_choice_questions_data.py`, `generative_qa_data.py`, and `style_transfer_data.py` as needed.
+> - Customize the prompts in these scripts according to your dataset.
 
 **Authorial Perspective Reframing**
 
