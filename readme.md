@@ -20,6 +20,8 @@ To set up the environment and install necessary dependencies, follow the steps b
 
 ### Data Generation
 
+> **Note:** Before running the scripts below, update input/output file names in `authorial_perspective_reframing.py`, `multiple_choice_questions_data.py`, `generative_qa_data.py`, and `style_transfer_data.py` as needed.
+
 **Authorial Perspective Reframing**
 
 Generate the Authorial Perspective Reframing pre-training data for the following commands:
@@ -50,6 +52,15 @@ Generate data for the style transfer task:
 
 ```
 python style_transfer_data.py
+```
+
+**Prepare Fine-tuning and Pre-training Data**
+
+After generating data from the above tasks, prepare the final datasets:
+
+```
+python prepare_finetune_data.py
+python prepare_pretrain_data.py
 ```
 
 
