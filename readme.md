@@ -16,6 +16,16 @@ To set up the environment and install necessary dependencies, follow the steps b
 - `conda activate characterbot`
 - `pip install -r requirements.txt`
 
+### Environment Variables
+
+Create a `.env` file in the project root with the following:
+
+```
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+Replace `your_openai_api_key_here` with your actual OpenAI API key.
+
 ## How to Use
 
 ### Data Generation
